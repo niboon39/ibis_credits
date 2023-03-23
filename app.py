@@ -18,6 +18,9 @@ def index():
                 credits.append(int(credit))
 
         new_credits = []
+        rate = request.form.get('rate')
+        rate_mapping = {'weekday':28.46 , 'saturday' : 34.9 , 'sunday':39.85}
+        
         c_32 = [2,7,12,18] # s_o -> K&Q Slipt bed : 20
         c_37 = [1]  # s_o -> Double : 25 
         c_27 = [3,4,5,6,8,9,10,11,13,14,15,16,17] # s_o -> standard : 15
@@ -39,13 +42,13 @@ def index():
         before_credits = sum(credits)
         after_credits = sum(new_credits)
         minutes_to_hr = str(after_credits / 60)
-
-        return render_template('index.html', credits=True, before_credits=before_credits, after_credits=after_credits, minutes_to_hr=minutes_to_hr)
+        Pay = float(minutes_to_hr) * rate_mapping[rate]
+        return render_template('index.html', credits=True, before_credits=before_credits, after_credits=after_credits, minutes_to_hr=minutes_to_hr , Pay=Pay)
     else:
         return render_template('index.html', credits=False)
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0",port=5000,debug=True)
+    app.run(host="0.0.0.0",port=8000,debug=True)
 
 
 # pip freeze >> requirements.txt
