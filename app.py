@@ -8,7 +8,7 @@ def index():
         rooms = []
         credits = []
         tasks = []
-        for i in range(1, 50):
+        for i in range(1, 100000):
             room = request.form.get(f'room_{i}')
             task = request.form.get(f'task_{i}')
             credit = request.form.get(f'credit_{i}')
@@ -19,8 +19,8 @@ def index():
 
         new_credits = []
         rate = request.form.get('rate')
-        rate_mapping = {'weekday':28.46 , 'saturday' : 34.9 , 'sunday':39.85}
-        
+        rate_mapping = {'weekday':28.46 , 'saturday' : 34.16 , 'sunday':39.85}
+
         c_32 = [2,7,12,18] # s_o -> K&Q Slipt bed : 20
         c_37 = [1]  # s_o -> Double : 25 
         c_27 = [3,4,5,6,8,9,10,11,13,14,15,16,17] # s_o -> standard : 15
@@ -43,7 +43,9 @@ def index():
         after_credits = sum(new_credits)
         minutes_to_hr = str(after_credits / 60)
         Pay = float(minutes_to_hr) * rate_mapping[rate]
-        return render_template('index.html', credits=True, before_credits=before_credits, after_credits=after_credits, minutes_to_hr=minutes_to_hr , Pay=Pay)
+        return render_template('index.html', credits=True, before_credits=before_credits, 
+                               after_credits=after_credits, minutes_to_hr=minutes_to_hr , 
+                               Pay=Pay,)
     else:
         return render_template('index.html', credits=False)
 

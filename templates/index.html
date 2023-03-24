@@ -18,7 +18,7 @@
       }
       
       tr:nth-child(even) {
-        background-color: #f2f2f2;
+        background-color:  #f2f2f2;
       }
     </style>
   </head>
@@ -29,9 +29,9 @@
       <input type="number" id="num-rooms" name="num_rooms" min="1" max="100"><br><br>
       <label for="rate">Select rate:</label>
       <select id="rate" name="rate">
-        <option value="weekday">Weekday</option>
-        <option value="saturday">Saturday</option>
-        <option value="sunday">Sunday</option>
+        <option value="weekday">Weekday Mon-Fri (28.46)</option>
+        <option value="saturday">Saturday (34.16)</option>
+        <option value="sunday">Sunday (39.85)</option>
       </select><br><br>
       <table>
         <thead>
@@ -44,7 +44,10 @@
         <tbody id="rooms"></tbody>
       </table>
       <br>
+      <input type="checkbox" id="terms-agreement" name="terms_agreement">
+      <label for="terms-agreement">All correct ? </label><br><br>
       <input type="submit" value="Submit">
+  
     </form>
     {% if credits %}
       <h2>Results:</h2>
@@ -52,11 +55,23 @@
       <p>After credits: {{ after_credits }}</p>
       <p>Minutes to hours: {{ minutes_to_hr }}</p>
       <p>Pay: {{ Pay }}</p> 
+      <!-- <p>ALL_room: {{ show_room }}</p>  -->
     {% endif %}
     <script>
       const numRoomsInput = document.getElementById('num-rooms');
       const rateSelect = document.getElementById('rate');
       const roomsContainer = document.getElementById('rooms');
+      // const submitButton = document.querySelector('input[type="submit"]');
+      const agreeCheckbox = document.getElementById('agree');
+      const submitButton = document.querySelector('input[type="submit"]');
+      const checkbox = document.querySelector('input[type="checkbox"]');
+
+      submitButton.addEventListener('click', (event) => {
+        if (!checkbox.checked) {
+          event.preventDefault();
+          alert('Please check the Room before submitting.');
+        }
+      });
       
       numRoomsInput.addEventListener('input', (event) => {
         const numRooms = parseInt(event.target.value);
