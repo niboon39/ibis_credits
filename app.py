@@ -41,7 +41,7 @@ def index():
 
         before_credits = sum(credits)
         after_credits = sum(new_credits)
-        minutes_to_hr = str(after_credits / 60)
+        minutes_to_hr = str(round(after_credits / 60,2))
         Pay = float(minutes_to_hr) * rate_mapping[rate]
         return render_template('index.html', credits=True, before_credits=before_credits, 
                                after_credits=after_credits, minutes_to_hr=minutes_to_hr , 
