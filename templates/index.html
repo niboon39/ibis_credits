@@ -23,13 +23,13 @@
     </style>
   </head>
   <body>
-    <h1>Calculate Credits</h1>
+    <h1>Calculate Credits</h1>  <p id="currentDateTime"></p>
     <form action="/" method="POST">
       <label for="num-rooms">How many rooms:</label>
       <input type="number" id="num-rooms" name="num_rooms" min="1" max="100"><br><br>
       <label for="rate">Select rate:</label>
       <select id="rate" name="rate">
-        <option value="weekday">Weekday Mon-Fri (28.46)</option>
+        <option value="weekday">Mon-Fri (28.46)</option>
         <option value="saturday">Saturday (34.16)</option>
         <option value="sunday">Sunday (39.85)</option>
       </select><br><br>
@@ -46,7 +46,7 @@
       <br>
       <input type="checkbox" id="terms-agreement" name="terms_agreement">
       <label for="terms-agreement">All correct ? </label><br><br>
-      <input type="submit" value="Submit">
+      <input type="submit" value="Submit"> 
   
     </form>
     {% if credits %}
@@ -59,63 +59,95 @@
     {% endif %}
     <script>
       const numRoomsInput = document.getElementById('num-rooms');
-      const rateSelect = document.getElementById('rate');
       const roomsContainer = document.getElementById('rooms');
-      // const submitButton = document.querySelector('input[type="submit"]');
       const agreeCheckbox = document.getElementById('agree');
       const submitButton = document.querySelector('input[type="submit"]');
+      const form = document.querySelector('form');
       const checkbox = document.querySelector('input[type="checkbox"]');
-
+      let currentNumRooms = 0;
+    
+      // form.addEventListener('submit', (event) => {
+        // const agreeCheckbox = document.getElementById('agree');
+      //   if (!agreeCheckbox.checked) {
+      //     event.preventDefault();
+      //     alert('Please check the Room before submitting.');
+      //   }
+      // });
       submitButton.addEventListener('click', (event) => {
         if (!checkbox.checked) {
           event.preventDefault();
           alert('Please check the Room before submitting.');
         }
       });
-      
+    
       numRoomsInput.addEventListener('input', (event) => {
         const numRooms = parseInt(event.target.value);
-        roomsContainer.innerHTML = '';
-        for (let i = 1; i <= numRooms; i++) {
-          const roomInput = document.createElement('input');
-          roomInput.type = 'number';
-          roomInput.name = `room_${i}`;
-          
-          const taskSelect = document.createElement('select');
-          taskSelect.name = `task_${i}`;
-          const stayOverOption = document.createElement('option');
-          stayOverOption.value = 'Stay over';
-          stayOverOption.textContent = 'Stay over';
-          taskSelect.appendChild(stayOverOption);
-          const departureCleanOption = document.createElement('option');
-          departureCleanOption.value = 'Departure Clean';
-          departureCleanOption.textContent = 'Departure Clean';
-          taskSelect.appendChild(departureCleanOption);
-          const stayoverFullLinenOption = document.createElement('option');
-          stayoverFullLinenOption.value = 'StayoverFullLinen';
-          stayoverFullLinenOption.textContent = 'StayoverFullLinen';
-          taskSelect.appendChild(stayoverFullLinenOption);
-          
-          const creditsInput = document.createElement('input');
-          creditsInput.type = 'number';
-          creditsInput.name = `credit_${i}`;
-          
-          const row = document.createElement('tr');
-          const roomCell = document.createElement('td');
-          const taskCell = document.createElement('td');
-          const creditsCell = document.createElement('td');
-          
-          roomCell.appendChild(roomInput);
-          taskCell.appendChild(taskSelect);
-          taskCell.appendChild(taskSelect);
-          creditsCell.appendChild(creditsInput);
-          row.appendChild(roomCell);
-          row.appendChild(taskCell);
-          row.appendChild(creditsCell);
-            
-          roomsContainer.appendChild(row);
-            }
+    
+        if (numRooms > currentNumRooms) {
+          for (let i = currentNumRooms + 1; i <= numRooms; i++) {
+            const roomInput = createInput('number', `room_${i}`);
+            const taskSelect = createTaskSelect(i);
+            const creditsInput = createInput('number', `credit_${i}`);
+            const row = createTableRow([roomInput, taskSelect, creditsInput]);
+            roomsContainer.appendChild(row);
+          }
+        } else if (numRooms < currentNumRooms) {
+          for (let i = currentNumRooms; i > numRooms; i--) {
+            roomsContainer.removeChild(roomsContainer.lastChild);
+          }
+        }
+    
+        currentNumRooms = numRooms;
+      });
+    
+      function createInput(type, name) {
+        const input = document.createElement('input');
+        input.type = type;
+        input.name = name;
+        return input;
+      }
+    
+      function createTaskSelect(index) {
+        const select = document.createElement('select');
+        select.name = `task_${index}`;
+    
+        const options = [
+          { value: 'Stay over', text: 'Stay over' },
+          { value: 'Departure Clean', text: 'Departure Clean' },
+          { value: 'StayoverFullLinen', text: 'StayoverFullLinen' }
+        ];
+    
+        options.forEach((optionData) => {
+          const option = document.createElement('option');
+          option.value = optionData.value;
+          option.textContent = optionData.text;
+          select.appendChild(option);
         });
-        </script>
+    
+        return select;
+      }
+    
+      function createTableRow(elements) {
+        const row = document.createElement('tr');
+    
+        elements.forEach((element) => {
+          const cell = document.createElement('td');
+          cell.appendChild(element);
+          row.appendChild(cell);
+        });
+    
+        return row;
+      }
+
+      function updateDateTime() {
+        const currentDateTimeElement = document.getElementById('currentDateTime');
+        const now = new Date();
+        currentDateTimeElement.textContent = now.toLocaleString();
+      }
+
+      // Call the updateDateTime function to display the date and time when the page loads
+      updateDateTime();
+    </script>        
+    
     </body>
 </html>
